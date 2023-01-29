@@ -90,4 +90,3 @@ export default function EditButton(props: props) {
         </>
     );
 }
-// (e) => console.log((e.target as HTMLButtonElement).value)

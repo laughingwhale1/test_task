@@ -77,7 +77,6 @@ export const userSlice = createSlice({
         },
         editStatus: (state, action: PayloadAction<EditTemplate>) => {
             state.users[action.payload.rowIndex].Status = action.payload.text
-            console.log(current(state.users[action.payload.rowIndex]))
         }, 
         deleteTransaction: (state, action: PayloadAction<DeleteTemplate>) => {
             state.users.splice(action.payload.rowIndex, 1)
