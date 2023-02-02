@@ -2,6 +2,7 @@ import { IUser } from "./../../models/IUser";
 import { AppDispatch } from "./../store";
 import axios from "axios";
 import { userSlice } from "./UserSlice";
+import { call, put, takeEvery } from "redux-saga/effects";
 
 async function fetchFunc() {
     return await axios
@@ -9,9 +10,8 @@ async function fetchFunc() {
         .then((response) => response.data);
 }
 
-import { call, put, takeEvery } from "redux-saga/effects";
 
-function* workerFetchUsers(dispatch: AppDispatch) {
+function* workerFetchUsers() {
     try {
         const response: IUser[] = yield call(() => fetchFunc());
         yield put(userSlice.actions.usersFetchingSuccess(response));
@@ -20,10 +20,14 @@ function* workerFetchUsers(dispatch: AppDispatch) {
     }
 }
 
+export const sagaAction = {
+    FETCH_DATA_STARTED: userSlice.actions.usersFetching
+}
+
 export function* watcherFetchUsers() {
     yield takeEvery("user/usersFetching", workerFetchUsers);
 }
-
+// "user/usersFetching"
 // =============================================== BELOW IS THE SAME ACTION BUT USING ASYNCTHUNK ==================================
 
 // export const fetchUsers = createAsyncThunk(

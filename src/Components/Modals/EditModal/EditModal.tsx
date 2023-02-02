@@ -9,35 +9,14 @@ import {
     useDisclosure,
     Input,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useAppDispatch } from "../hooks/redux";
-import { userSlice } from "../store/reducers/UserSlice";
+import { TableActionProps } from "../../../models/IUser";
+import useEditing from "./useEditing";
 
-type Inputs = {
-    userText: string;
-};
 
-type props = {
-    index: number;
-};
 
-export default function EditButton(props: props) {
-    const dispatch = useAppDispatch();
+export default function EditModal(props: TableActionProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [rowIndex, setRowIndex] = useState<number>(0);
-
-    const { register, handleSubmit, watch } = useForm<Inputs>();
-
-    const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
-        dispatch(
-            userSlice.actions.editStatus({
-                rowIndex: rowIndex,
-                text: data.userText,
-            })
-        );
-        onClose();
-    };
+    const { setRowIndex, handleSubmit, register, onSubmit } = useEditing();
 
     return (
         <>

@@ -1,57 +1,24 @@
-import React, { CSSProperties } from "react";
-const styles = {
-    csvReader: {
-        display: "flex",
-        flexDirection: "row",
-        marginBottom: 10,
-    } as CSSProperties,
-    browseFile: {
-        width: "20%",
-    } as CSSProperties,
-    acceptedFile: {
-        border: "1px solid #ccc",
-        height: 45,
-        lineHeight: 2.5,
-        paddingLeft: 10,
-        width: "80%",
-    } as CSSProperties,
-    remove: {
-        borderRadius: 0,
-        padding: "0 20px",
-    } as CSSProperties,
-    progressBarBackgroundColor: {
-        backgroundColor: "red",
-    } as CSSProperties,
-};
+import React from "react";
+import styles from "./styles";
 import {
     Button,
     Modal,
     ModalBody,
     ModalCloseButton,
     ModalContent,
-    ModalFooter,
     ModalHeader,
     ModalOverlay,
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import { useCSVReader, usePapaParse } from "react-papaparse";
-import { useAppDispatch } from "../hooks/redux";
-import { userSlice } from "../store/reducers/UserSlice";
-import { IUser } from "../models/IUser";
-export let uploadedData: IUser[];
-export default function ImportButton() {
-    const { readString } = usePapaParse();
+import { useCSVReader } from "react-papaparse";
+import useImporting from "./useImporting";
+
+export default function ImportModal () {
     const { CSVReader } = useCSVReader();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const dispatch = useAppDispatch();
-    const handleFileSaving = (data: any) => {
-        uploadedData = data.data;
-    };
 
-    const handleFileDataUpload = () => {
-        dispatch(userSlice.actions.usersFromCSVFile(uploadedData));
-    }
+    const { handleFileDataUpload, handleFileSaving } = useImporting();
 
     return (
         <>
@@ -129,30 +96,4 @@ export default function ImportButton() {
             </Modal>
         </>
     );
-}
-
-{
-    /* <form onSubmit={handleSubmit(onSubmit)}>
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent> 
-                        <ModalHeader>Import your .csv file</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <input
-                                {...register('csvfile')}
-                                type="file"
-                                name="csvfile"
-                            ></input>
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <Button colorScheme="blue" mr={3} onClick={onClose}>
-                                Close
-                            </Button>
-                            <Button onClick={onClose} type='submit' variant="ghost">Submit</Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            </form> */
 }

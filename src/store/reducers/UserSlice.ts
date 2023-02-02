@@ -1,15 +1,14 @@
 
 import { createSlice, current, original, PayloadAction } from '@reduxjs/toolkit';
-import { uploadedData } from '../../Components/ImportButton';
-import { filterOptionsTypes, IUser, filterTemplate, filteredBy, EditTemplate, downloadData, DeleteTemplate } from './../../models/IUser';
+import { FilterOptionsTypes, IUser, FilterTemplate, FilteredBy, EditTemplate, DownloadData, DeleteTemplate } from './../../models/IUser';
 
 interface UserState {
     users: IUser[];
     isLoading: boolean;
     error: string;
-    filterOptions: filterOptionsTypes;
-    filteredBy: filteredBy;
-    downloadData: downloadData[];
+    filterOptions: FilterOptionsTypes;
+    filteredBy: FilteredBy;
+    downloadData: DownloadData[];
 }
 
 const initialState: UserState = {
@@ -21,8 +20,8 @@ const initialState: UserState = {
         type: []
     },
     filteredBy: {
-        Status: 'Status',
-        Type: 'Type'
+        status: 'Status',
+        type: 'Type'
     },
     downloadData: []
 }
@@ -43,9 +42,9 @@ export const userSlice = createSlice({
             state.users = action.payload;
             fetchedTestData = action.payload;
 //=========================== yes i do not stick to DRY principle in this reducer and usersFromCSVFile reducer but i do in intentionally ==========================================
-            const uniqueStatus: string[] = [...new Set(action.payload.slice(0, 10).map(item => item.Status))];
+            const uniqueStatus: string[] = [...new Set(action.payload.map(item => item.Status))];
             state.filterOptions.status = ['Status', ...uniqueStatus]
-            const uniqueType: string[] = [...new Set(action.payload.slice(0, 10).map(item => item.Type))];
+            const uniqueType: string[] = [...new Set(action.payload.map(item => item.Type))];
             state.filterOptions.type = ['Type', ...uniqueType]
         },
         usersFetchingError: (state, action: PayloadAction<string>) =>  {
@@ -55,24 +54,24 @@ export const userSlice = createSlice({
         usersFromCSVFile: (state, action: PayloadAction<IUser[]>) => {
             state.users = action.payload;
             fetchedTestData = action.payload;
-            const uniqueStatus: string[] | undefined = [...new Set(action.payload.slice(0, 10).map(item => item.Status))];
+            const uniqueStatus: string[] | undefined = [...new Set(action.payload.map(item => item.Status))];
             state.filterOptions.status = ['Status', ...uniqueStatus]
-            const uniqueType: string[] = [...new Set(action.payload.slice(0, 10).map(item => item.Type))];
+            const uniqueType: string[] = [...new Set(action.payload.map(item => item.Type))];
             state.filterOptions.type = ['Type', ...uniqueType]
         },
-        filterData: (state, action: PayloadAction<filterTemplate>) => {
-            state.filteredBy[action.payload.name as keyof filteredBy] = action.payload.filterBy
-            if (state.filteredBy['Status'] === 'Status' || state.filteredBy['Type'] === 'Type') {
-                if (state.filteredBy['Status'] === 'Status' && state.filteredBy['Type'] === 'Type') {
+        filterData: (state, action: PayloadAction<FilterTemplate>) => {
+            state.filteredBy[action.payload.name as keyof FilteredBy] = action.payload.filterBy
+            if (state.filteredBy['status'] === 'Status' || state.filteredBy['type'] === 'Type') {
+                if (state.filteredBy['status'] === 'Status' && state.filteredBy['type'] === 'Type') {
                     state.users = fetchedTestData;
                     return;
                 }
-                state.users = state.filteredBy['Status'] === 'Status' ? fetchedTestData.filter((item) => item['Status']  && item['Type'] === state.filteredBy['Type']) : fetchedTestData.filter((item) => item['Status'] === state.filteredBy['Status'] && item['Type'])
+                state.users = state.filteredBy['status'] === 'Status' ? fetchedTestData.filter((item) => item['Status']  && item['Type'] === state.filteredBy['type']) : fetchedTestData.filter((item) => item['Status'] === state.filteredBy['status'] && item['Type'])
                 return;
             }
-            state.users = fetchedTestData.filter((item) => item['Status'] === state.filteredBy['Status'] && item['Type'] === state.filteredBy['Type'])
+            state.users = fetchedTestData.filter((item) => item['Status'] === state.filteredBy['status'] && item['Type'] === state.filteredBy['type'])
         },
-        setDownloadData: (state, action: PayloadAction<downloadData[]>) => {
+        setDownloadData: (state, action: PayloadAction<DownloadData[]>) => {
             state.downloadData = action.payload;
         },
         editStatus: (state, action: PayloadAction<EditTemplate>) => {

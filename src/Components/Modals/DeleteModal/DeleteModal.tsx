@@ -1,6 +1,5 @@
 import {
     Button,
-    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -12,33 +11,14 @@ import {
     Wrap,
     WrapItem,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useAppDispatch } from "../hooks/redux";
-import { userSlice } from "../store/reducers/UserSlice";
+import { TableActionProps } from "../../../models/IUser";
+import useDeleting from "./useDeleting";
 
-type props = {
-    index: number;
-};
 
-type Inputs = {
-    userText: string;
-};
 
-export default function DeleteButton(props: props) {
-    const dispatch = useAppDispatch();
+export default function DeleteModal (props: TableActionProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [rowIndex, setRowIndex] = useState<number>(0);
-    const { register, handleSubmit, watch } = useForm<Inputs>();
-
-    const handleDeletion = () => {
-        dispatch(
-            userSlice.actions.deleteTransaction({
-                rowIndex: rowIndex
-            })
-        );
-        onClose()
-    };
+    const { handleDeletion, setRowIndex } = useDeleting()
 
     return (
         <>
@@ -59,6 +39,7 @@ export default function DeleteButton(props: props) {
             >
                 Delete
             </Button>
+
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -79,7 +60,7 @@ export default function DeleteButton(props: props) {
                                             background: "#9AE6B4",
                                             border: "1px white solid",
                                         }}
-                                        onClick={() => handleDeletion()}
+                                        onClick={() => {handleDeletion(); onClose()}}
                                     >
                                         Confirm
                                     </Button>

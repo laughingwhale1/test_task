@@ -6,22 +6,22 @@ export interface IUser {
     Amount: number
 }
 
-export interface filterOptionsTypes {
+export interface FilterOptionsTypes {
     status: string[];
     type: string[];
 }
 
-export interface filterTemplate {
+export interface FilterTemplate {
     name: string;
     filterBy: string;
 }
 
-export interface filteredBy {
-    Status: string;
-    Type: string;
+export interface FilteredBy {
+    status: string;
+    type: string;
 }
 
-export interface downloadData {
+export interface DownloadData {
     TransactionId?: number;
     Status?: string;
     Type?: string;
@@ -37,3 +37,29 @@ export interface EditTemplate {
 export interface DeleteTemplate {
     rowIndex: number;
 }
+
+export interface PaginationObj {
+    totalCount: number;
+    pageSize: number;
+    siblingCount?: number;
+    currentPage: number;
+}
+
+export type TableContentsProps = {
+    data: IUser[];
+    error?: string
+}
+
+export type TableActionProps = {
+    index: number
+}
+
+export type TableActionEditInput = {
+    userText: string;
+}
+
+export type ExportFormInput = {
+    ClientName: boolean;
+    Amount: boolean;
+}
+

@@ -1,0 +1,1 @@
+export let pageSize: number = 5;

@@ -1,3 +1,4 @@
+import { PaginationObj } from './../../../models/IUser';
 import React from 'react';
 import { useMemo } from 'react';
 
@@ -8,19 +9,12 @@ const range = (start: number, end: number) => {
   return Array.from({ length }, (_, idx) => idx + start);
 };
 
-interface paginationObj {
-    totalCount: number;
-    pageSize: number;
-    siblingCount?: number;
-    currentPage: number;
-}
-
 export const usePagination = ({
   totalCount,
   pageSize,
   siblingCount = 1,
   currentPage
-}: paginationObj) => {
+}: PaginationObj) => {
   const paginationRange = useMemo(() => {
     const totalPageCount = Math.ceil(totalCount / pageSize);
 
